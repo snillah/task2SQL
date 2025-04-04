@@ -1,0 +1,92 @@
+CREATE DATABASE ecommerce
+CREATE TABLE customers(
+ cusid integer primary key,
+ name varchar(50),
+ email varchar(15),
+ address varchar(50),
+);
+INSERT INTO customers(cusid,name,email,address) VALUES(1,"name1","name@gmail.com","chennai");
+INSERT INTO customers(cusid,name,email,address) VALUES(2,"name2","name@gmail.com","chennai");
+INSERT INTO customers(cusid,name,email,address) VALUES(3,"name3","name@gmail.com","chennai");
+
+SELECT * FROM customers
+
+CREATE TABLE orders(
+id integer primary key,
+order_date date,
+total_amount float,
+cus_id integer
+foreign key(cus_id) references customers(cusid)
+);
+SELECT *from orders;
+INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(1,2,"2025-04-01",5000.00);
+INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(2,1,"2025-03-02",500.00);
+INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(3,2,"2025-04-01",100.00);
+CREATE TABLE products(
+proId integer primary key,
+proname varchar(20),
+price float,
+description varchar(50)
+);
+
+INSERT INTO products(proId,proname,price,description)VALUES(1,"productA",20,"product description formed" );
+INSERT INTO products(proId,proname,price,description)VALUES(2,"productB",10,"product description formed" );
+SELECT * from products;
+
+--create tables order Items 
+create table order_items(
+ items_id INT PRIMARY KEY,
+ order_id INT NOT NULL,
+ product_id INT NOT NULL,
+ item_qty int,
+ item_price int,
+ subtotal INT,
+ FOREIGN KEY(order_id)REFERENCES orders(id) on DELETE CASCADE,
+ FOREIGN KEY(product_id)REFERENCES products(proId)
+ );
+INSERT INTO order_items(items_id,order_id,product_id,item_price,item_qty,subtotal)
+VALUES(11,1,5,25,100,2500);
+INSERT INTO order_items(items_id,order_id,product_id,item_price,item_qty,subtotal)
+VALUES(12,1,5,25,100,2500);
+INSERT INTO order_items(items_id,order_id,product_id,item_price,item_qty,subtotal)
+VALUES(21,2,5,25,100,500);
+INSERT INTO order_items(items_id,order_id,product_id,item_price,item_qty,subtotal)
+VALUES(31,3,2,10,5,50);
+INSERT INTO order_items(items_id,order_id,product_id,item_price,item_qty,subtotal)
+VALUES(32,3,2,10,5,50);
+
+Quires
+Quires :2- Get the total amount of all orders placed by each customer.
+select name, sum(total_amount) as total_Value from orders INNER join customers
+on orders.cusid = customers.cusid GROUP by name;
+Quires : 3 Update the price of Product C to 45.00.
+UPDATE products set price = 10 WHERE proId = 2
+Quires : 4 Add a new column discount to the products table.
+ALTER TABLE products ADD discount INT;
+Quires : 5 Retrieve the top 3 products with the highest price.
+SELECT * from products order by price DESC LIMIT 3;
+Quires :6 Get the names of customers who have ordered Product A.
+SELECT id,order_date,total_amount,cus_id,name,product_id,item_qty,item_price,subtotal FROM orders 
+left join customers on orders.cus_id = customers.cusid
+INNER join order_items on orders.id = order_items.order_id
+where product_id =1;
+Quires :7 Join the orders and customers tables to retrieve the customer's name and order date for each order.
+SELECT id,order_date,total_amount,cus_id,name FROM orders 
+left join customers on orders.cus_id = customers.cusid;
+Quires : 8 Retrieve the orders with a total amount greater than 150.00.
+SELECT * FROM orders where total_amount >150;
+Quires : 8 Normalize the database by creating a separate table for order items and updating the orders table to reference the order_items table.
+create table order_items(
+ items_id INT PRIMARY KEY,
+ order_id INT NOT NULL,
+ product_id INT NOT NULL,
+ item_qty int,
+ item_price int,
+ subtotal INT,
+ FOREIGN KEY(order_id)REFERENCES orders(id) on DELETE CASCADE,
+ FOREIGN KEY(product_id)REFERENCES products(proId)
+ );
+Quires:9 Retrieve the average total of all orders
+SELECT avg(id) as avg FROM orders;
+
+
