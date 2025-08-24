@@ -22,6 +22,7 @@ SELECT *from orders;
 INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(1,2,"2025-04-01",5000.00);
 INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(2,1,"2025-03-02",500.00);
 INSERT INTO orders(id,cus_id,order_date,total_amount) VALUES(3,2,"2025-04-01",100.00);
+
 CREATE TABLE products(
 proId integer primary key,
 proname varchar(20),
@@ -70,7 +71,7 @@ SELECT id,order_date,total_amount,cus_id,name,product_id,item_qty,item_price,sub
 left join customers on orders.cus_id = customers.cusid
 INNER join order_items on orders.id = order_items.order_id
 where product_id =1;
-Quires :7 Join the orders and customers tables to retrieve the customer's name and order date for each order.
+Quires :7 Join the orders and customers tables to retrieve the customers name and order date for each order.
 SELECT id,order_date,total_amount,cus_id,name FROM orders 
 left join customers on orders.cus_id = customers.cusid;
 Quires : 8 Retrieve the orders with a total amount greater than 150.00.
